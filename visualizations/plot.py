@@ -1,33 +1,5 @@
-# src/quick_visual_interactive.py
-import pandas as pd
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
-from fredapi import Fred
-from dotenv import load_dotenv
-import os
-
-load_dotenv()
-fred = Fred(api_key=os.getenv('FRED_API_KEY'))
-
-# Get data
-fed_rate = fred.get_series('DFF', observation_start='2020-01-01')
-sp500 = fred.get_series('SP500', observation_start='2020-01-01')
-gdp = fred.get_series('GDP', observation_start='2020-01-01')
-
-
-gdp_df = pd.DataFrame({
-    "date": gdp.index,
-    "gdp": gdp.values
-})
-
-
-gdp_df["gdp_trillion"] = gdp_df["gdp"] / 1000
-first_five = gdp_df["gdp_trillion"][:5]
-
-
-print(first_five)
-
-# Create subplots
 
 
 
