@@ -2,16 +2,17 @@ from pathlib import Path
 import pandas as pd
 
 
-def load_master_dataset():
+def load_csv(relative_path):
     """
     Load the master dataset with all historical data
 
     Returns:
         pandas DataFrame with dates as index
     """
+
     current_file = Path(__file__)
     project_root = current_file.parent.parent.parent
-    file_path = project_root / 'data' / 'staging' / 'master_dataset.csv'
+    file_path = project_root / relative_path
 
     # Check if file exists
     if not file_path.exists():

@@ -7,11 +7,11 @@ project_root = Path(__file__).parent.parent.parent
 
 
 import pandas as pd
-from utils.data_loader import load_master_data
+from utils.data_loader import load_csv
 
 
 def identify_rate_events():
-    df = load_master_data()
+    df = load_csv("data/staging/master_data.csv")
     output_path = '../../data/processed/fed_events.csv'
 
 
