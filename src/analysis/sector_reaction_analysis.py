@@ -21,8 +21,8 @@ def get_sector_reactions(lag_analysis):
 
     sector_reactions = pd.DataFrame(index=lag_analysis.index)
     sector_reactions_summary = pd.DataFrame()
+    sector_reactions_summary_no_covid = pd.DataFrame()
     for ticker in markets:
-        day_zero = lag_analysis[f'{ticker}_day0']
         day_one = lag_analysis[f'{ticker}_day1']
         day_three = lag_analysis[f'{ticker}_day3']
         day_seven = lag_analysis[f'{ticker}_day7']
@@ -34,6 +34,11 @@ def get_sector_reactions(lag_analysis):
         sector_reactions[f'{ticker}_day3_reaction_speed'] = (abs(day_three) / abs(day_thirty)) * 100
         sector_reactions[f'{ticker}_day7_reaction_speed'] = (abs(day_seven) / abs(day_thirty)) * 100
 
+
+
+    sector_reactions_no_covid = sector_reactions[~sector_reactions.index.isin(pd.to_datetime(['2020-03-04', '2020-03-16']))]
+
+
     for ticker in markets:
         for lag in ['day1', 'day3', 'day7']:
             col = f'{ticker}_{lag}_reaction_speed'
@@ -43,12 +48,23 @@ def get_sector_reactions(lag_analysis):
                 'avg_reaction_speed': round(sector_reactions[col].mean(), 2)
             }])], ignore_index=True)
 
+            sector_reactions_summary_no_covid  = pd.concat([sector_reactions_summary_no_covid, pd.DataFrame([{
+                'sector': ticker.upper(),
+                'lag': lag,
+                'avg_reaction_speed': round(sector_reactions_no_covid[col].mean(), 2)
+            }])], ignore_index=True)
+
+
+
 
     sector_reactions.to_csv('../../data/processed/sector_reaction_speeds.csv')
     print("✓ Per-event reaction speeds saved to data/processed/sector_reaction_speeds.csv")
 
     sector_reactions_summary.to_csv('../../data/processed/sector_reaction_speeds_summary.csv')
     print("✓ Summary averages saved to data/processed/sector_reaction_speeds_summary.csv")
+    sector_reactions_summary_no_covid.to_csv("../../data/processed/sector_reaction_speeds_no_covid.csv")
+    print("✓ Summary averages saved to data/processed/sector_reaction_speeds_summary_no_covid.csv")
+
 
 
 
